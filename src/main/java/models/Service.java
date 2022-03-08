@@ -1,17 +1,17 @@
+package models;
+
 import java.util.Objects;
 
 public class Service {
 
     private int id;
-    private String name;
+    private String noOfBedRooms;
     private String photoLink;
-    private String description;
     private int price;
 
-    public Service(String name, String photoLink, String description, int price) {
-        this.name = name;
+    public Service(String noOfBedRooms, String photoLink, int price) {
+        this.noOfBedRooms = noOfBedRooms;
         this.photoLink = photoLink;
-        this.description = description;
         this.price = price;
     }
 
@@ -23,12 +23,8 @@ public class Service {
         return photoLink;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
+    public String getNoOfBedRooms() {
+        return noOfBedRooms;
     }
 
     public int getPrice() {
@@ -39,16 +35,12 @@ public class Service {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNoOfBedRooms(String noOfBedRooms) {
+        this.noOfBedRooms = noOfBedRooms;
     }
 
     public void setPhotoLink(String photoLink) {
         this.photoLink = photoLink;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public void setPrice(int price) {
@@ -60,11 +52,11 @@ public class Service {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Service service = (Service) o;
-        return id == service.id && price == service.price && name.equals(service.name) && photoLink.equals(service.photoLink) && description.equals(service.description);
+        return id == service.id && price == service.price && noOfBedRooms.equals(service.noOfBedRooms) && photoLink.equals(service.photoLink);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, photoLink, description, price);
+        return Objects.hash(id, noOfBedRooms, photoLink, price);
     }
 }
