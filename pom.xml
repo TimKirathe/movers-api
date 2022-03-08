@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.moversapi</groupId>
-    <artifactId>Movers-Api</artifactId>
+    <artifactId>movers-apis</artifactId>
     <version>1.0</version>
 
     <dependencies>
@@ -95,9 +95,9 @@
                 <configuration>
                     <jdkVersion>1.8</jdkVersion>
                     <!-- Change this to YOUR application name! -->
-                    <appName>movers-api</appName>
+                    <appName>movers-apis</appName>
                     <processTypes>
-                        <web>java -jar target/movers-api-1.0-jar-with-dependencies.jar</web>
+                        <web>java -jar target/movers-apis-1.0-jar-with-dependencies.jar</web>
                     </processTypes>
                 </configuration>
             </plugin>
