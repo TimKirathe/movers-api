@@ -33,12 +33,35 @@ public class App {
             return gson.toJson(postResponse);
         });
 
+        // Post User to DB
         post("/users/new", "application/json", (req, res) -> {
+            System.out.println(req.body().toString());
             User user = gson.fromJson(req.body(), User.class);
+            String hashedPassword = user.getPassword();
+            user.setPassword(hashedPassword);
             sql2oUserDao.save(user);
             res.status(201);
             PostResponse postResponse = new PostResponse(201, "Successfully Added");
             return gson.toJson(postResponse);
+        });
+
+        // User Logged In
+        post("/users/login", "application/json", (req, res) -> {
+            LoginUser loginUser = gson.fromJson(req.body(), LoginUser.class);
+            User user = sql2oUserDao.findByEmail(loginUser.getEmail());
+            if (user == null) {
+                res.status(404);
+                ErrorResponse errorResponse = new ErrorResponse(404, "This user does not exist");
+                return gson.toJson(errorResponse);
+            }
+            if (!loginUser.getPassword().equals(user.getPassword()) || !loginUser.getEmail().equals(user.getEmail())) {
+                res.status(404);
+                ErrorResponse errorResponse = new ErrorResponse(404, "The email or password is not correct.");
+                return gson.toJson(errorResponse);
+            }
+            res.status(201);
+            LoginResponse loginResponse = new LoginResponse(201, "Success", user);
+            return gson.toJson(loginResponse);
         });
 
 
@@ -47,8 +70,8 @@ public class App {
         // Get all services
         get("/services", "application/json", (req, res) -> {
             if (sql2oServiceDao.getAll().size() == 0) {
-                String noData = "Sorry, there are currently no services available";
-                return gson.toJson(noData);
+                ErrorResponse errorResponse = new ErrorResponse(404, "Sorry, there are no services currently available.");
+                return gson.toJson(errorResponse);
             }
             ResponseList response = new ResponseList(200, "Success", sql2oServiceDao.getAll());
             res.status(200);
@@ -59,22 +82,10 @@ public class App {
         get("services/:id", "application/json", (req, res) -> {
             int id = Integer.parseInt(req.params("id"));
             if (sql2oServiceDao.findById(id) == null) {
-                String noData = "Sorry no such service exists";
-                return gson.toJson(noData);
+                ErrorResponse errorResponse = new ErrorResponse(404, "Sorry, no such service exists.");
+                return gson.toJson(errorResponse);
             }
             ResponseObject responseObject = new ResponseObject(200, "Success", sql2oServiceDao.findById(id));
-            res.status(200);
-            return gson.toJson(responseObject);
-        });
-
-        get("users/:userId", "application/json", (req, res) -> {
-            String userId = req.params("userId");
-            if (sql2oUserDao.findById(userId) == null) {
-                ErrorResponse response = new ErrorResponse(404, "That user does not exist.");
-                res.status(404);
-                return gson.toJson(response);
-            }
-            ResponseObject responseObject = new ResponseObject(200, "Success", sql2oUserDao.findById(userId));
             res.status(200);
             return gson.toJson(responseObject);
         });

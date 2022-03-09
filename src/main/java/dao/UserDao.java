@@ -10,7 +10,7 @@ public interface UserDao {
     void save(User user);
 
     // READ
-    User findById(String userId);
+    User findByEmail(String email);
     List<User> getAll();
 
     // UPDATE

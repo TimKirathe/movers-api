@@ -33,10 +33,10 @@ public class Sql2oUserDao implements UserDao {
     }
 
     @Override
-    public User findById(String userId) {
+    public User findByEmail(String email) {
         try(Connection con = sql2o.open()) {
-            String sql = "SELECT * FROM users WHERE userid = :userid";
-            return con.createQuery(sql).addParameter("userid", userId).executeAndFetchFirst(User.class);
+            String sql = "SELECT * FROM users WHERE email = :email";
+            return con.createQuery(sql).addParameter("email", email).executeAndFetchFirst(User.class);
         } catch (Sql2oException e) {
             System.out.println(e);
             return null;
