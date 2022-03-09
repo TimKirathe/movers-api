@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import dao.Sql2oCalculateDao;
 import dao.Sql2oServiceDao;
 import dao.Sql2oUserDao;
 import models.*;
@@ -22,13 +23,14 @@ public class App {
 
         Sql2oServiceDao sql2oServiceDao;
         Sql2oUserDao sql2oUserDao;
+        Sql2oCalculateDao sql2oCalculateDao = null;
         Connection conn;
         Gson gson = new Gson();
 
-//        String connectionString = "jdbc:postgresql://localhost:5432/movers_api";
-//        Sql2o sql2o = new Sql2o(connectionString, "adamu", "Adamu");
-        String connectionString = "jdbc:postgresql://ec2-44-195-191-252.compute-1.amazonaws.com:5432/d31d0ej81h1a3t";
-        Sql2o sql2o = new Sql2o(connectionString, "lxrmrvoltijuwe", "24ddcf97e38426cc5908b6c83709d0b4294f3033c62a944542aa7f91571e8aaf");
+        String connectionString = "jdbc:postgresql://localhost:5432/movers_api";
+        Sql2o sql2o = new Sql2o(connectionString, "adamu", "Adamu");
+//        String connectionString = "jdbc:postgresql://ec2-44-195-191-252.compute-1.amazonaws.com:5432/d31d0ej81h1a3t";
+//        Sql2o sql2o = new Sql2o(connectionString, "lxrmrvoltijuwe", "24ddcf97e38426cc5908b6c83709d0b4294f3033c62a944542aa7f91571e8aaf");
         sql2oServiceDao = new Sql2oServiceDao(sql2o);
         sql2oUserDao = new Sql2oUserDao(sql2o);
         conn = sql2o.open();
@@ -99,6 +101,18 @@ public class App {
             ResponseObject responseObject = new ResponseObject(200, "Success", sql2oServiceDao.findById(id));
             res.status(200);
             return gson.toJson(responseObject);
+        });
+
+        // Get all calculations
+        get("/calculate", "application/json", (req, res) -> {
+
+            if (sql2oCalculateDao.getAll().size() == 0) {
+                ErrorResponse errorResponse = new ErrorResponse(404, "There are no prices to calculate.");
+                return gson.toJson(errorResponse);
+            }
+            ResponseList response = new ResponseList(200, "Success", sql2oCalculateDao.getAll());
+            res.status(200);
+            return gson.toJson(response);
         });
 
 
