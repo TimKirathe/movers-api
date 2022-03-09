@@ -1,3 +1,5 @@
+import dao.Sql2oServiceDao;
+import models.Service;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -29,15 +31,23 @@ class Sql2oServiceDaoTest {
     }
 
     @Test
-    void serviceReturnedSuccessfullyFromDB() {
+    void serviceSavedToTheDBandReturnedCorrectly() {
         Service service1 = setUpService();
-        Service service2 = sql2oServiceDao.findById(service1.getId());
+        sql2oServiceDao.save(service1);
+        Service service2 = sql2oServiceDao.getAll().get(0);
         assertTrue(service1.equals(service2));
     }
 
+    @Test
+    void serviceSuccessfullyDeletedFromDB() {
+        Service service1 = setUpService();
+        sql2oServiceDao.save(service1);
+        sql2oServiceDao.deleteById(service1.getId());
+        assertEquals(0, sql2oServiceDao.getAll().size());
+    }
+
     public Service setUpService() {
-        Service service = new Service("Bed-Sitter", "https://i.postimg.cc/C1Z9YqcL/redd-sej-Ly-CD2-UQE-unsplash.jpg", "a one-roomed unit of accommodation typically consisting of combined bedroom and sitting room with cooking facilities.", 20000);
-        service.setId(1);
+        Service service = new Service("1", "https://i.postimg.cc/C1Z9YqcL/redd-sej-Ly-CD2-UQE-unsplash.jpg", 20000);
         return service;
     }
 
