@@ -1,5 +1,5 @@
 import com.google.gson.Gson;
-import dao.Sql2oCalculateDao;
+import dao.ServiceDao;
 import dao.Sql2oServiceDao;
 import dao.Sql2oUserDao;
 import models.*;
@@ -23,7 +23,6 @@ public class App {
 
         Sql2oServiceDao sql2oServiceDao;
         Sql2oUserDao sql2oUserDao;
-        Sql2oCalculateDao sql2oCalculateDao = null;
         Connection conn;
         Gson gson = new Gson();
 
@@ -104,13 +103,13 @@ public class App {
         });
 
         // Get all calculations
-        get("/calculate", "application/json", (req, res) -> {
-
-            if (sql2oCalculateDao.getAll().size() == 0) {
-                ErrorResponse errorResponse = new ErrorResponse(404, "There are no prices to calculate.");
-                return gson.toJson(errorResponse);
-            }
-            ResponseList response = new ResponseList(200, "Success", sql2oCalculateDao.getAll());
+        post("/calculate", "application/json", (req, res) -> {
+            Calculate calculate = gson.fromJson(req.body(), Calculate.class);
+            Service service =sql2oServiceDao.findById(calculate.getId());
+            int rate = 200;
+            int distance = 100;
+            int price = service.getPrice() + (rate * distance );
+            ResponseObject response = new ResponseObject(200, "Success",price);
             res.status(200);
             return gson.toJson(response);
         });

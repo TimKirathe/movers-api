@@ -47,7 +47,7 @@ class Sql2oServiceDaoTest {
     }
 
     public Service setUpService() {
-        Service service = new Service("1", "https://i.postimg.cc/C1Z9YqcL/redd-sej-Ly-CD2-UQE-unsplash.jpg", 20000);
+        Service service = new Service("apartment","1", "https://i.postimg.cc/C1Z9YqcL/redd-sej-Ly-CD2-UQE-unsplash.jpg", 20000);
         return service;
     }
 
