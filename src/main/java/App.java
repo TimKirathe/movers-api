@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import dao.Sql2oInvoiceDao;
 import dao.Sql2oServiceDao;
 import dao.Sql2oUserDao;
 import models.*;
@@ -13,13 +14,15 @@ public class App {
 
         Sql2oServiceDao sql2oServiceDao;
         Sql2oUserDao sql2oUserDao;
+        Sql2oInvoiceDao sql2oInvoiceDao;
         Connection conn;
         Gson gson = new Gson();
 
-        String connectionString = "jdbc:postgresql://localhost:5432/movers_api";
-        Sql2o sql2o = new Sql2o(connectionString, null, null);
+        String connectionString = "jdbc:postgresql://localhost:5432/movers_database";
+        Sql2o sql2o = new Sql2o(connectionString, "fiona", "Man");
         sql2oServiceDao = new Sql2oServiceDao(sql2o);
         sql2oUserDao = new Sql2oUserDao(sql2o);
+        sql2oInvoiceDao = new Sql2oInvoiceDao (sql2o);
         conn = sql2o.open();
 
         // POST METHODS
@@ -44,6 +47,16 @@ public class App {
             PostResponse postResponse = new PostResponse(201, "Successfully Added");
             return gson.toJson(postResponse);
         });
+
+        // Post User to DB
+        post("/invoice/new", "application/json", (req, res)-> {
+            Invoice invoice = gson.fromJson(req.body(), Invoice.class);
+            sql2oInvoiceDao.save(invoice);
+            res.status(201);
+            PostResponse postResponse = new PostResponse(201, "Successfully Added");
+            return gson.toJson(postResponse);
+        });
+
 
         // User Logged In
         post("/users/login", "application/json", (req, res) -> {
@@ -86,6 +99,40 @@ public class App {
                 return gson.toJson(errorResponse);
             }
             ResponseObject responseObject = new ResponseObject(200, "Success", sql2oServiceDao.findById(id));
+            res.status(200);
+            return gson.toJson(responseObject);
+        });
+
+        // Get all invoice
+        get("invoice/all", "application/json", (req, res) -> {
+            if (sql2oServiceDao.getAll().size() == 0) {
+                ErrorResponse errorResponse = new ErrorResponse(404, "Sorry, there are no services currently available.");
+                return gson.toJson(errorResponse);
+            }
+            ResponseList response = new ResponseList(200, "Success", sql2oServiceDao.getAll());
+            res.status(200);
+            return gson.toJson(response);
+        });
+
+        get ("invoice/user/:id", "application/json", (req, res) -> {
+            int id = Integer.parseInt(req.params("id"));
+            if (sql2oInvoiceDao.findByUserId(id) == null) {
+                ErrorResponse errorResponse = new ErrorResponse(404, "Sorry, no such service exists.");
+                return gson.toJson(errorResponse);
+            }
+            ResponseList responseList = new ResponseList(200, "Success", sql2oInvoiceDao.findByUserId(id));
+            res.status(200);
+            return gson.toJson(responseList);
+
+        });
+
+        get ("invoice/:id", "application/json", (req, res)->{
+            int id = Integer.parseInt(req.params("id"));
+            if (sql2oInvoiceDao.findById(id) == null) {
+                ErrorResponse errorResponse = new ErrorResponse(404, "Sorry, no such service exists.");
+                return gson.toJson(errorResponse);
+            }
+            ResponseObject responseObject = new ResponseObject(200, "Success", sql2oInvoiceDao.findById(id));
             res.status(200);
             return gson.toJson(responseObject);
         });
