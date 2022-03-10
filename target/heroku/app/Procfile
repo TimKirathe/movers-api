@@ -1,1 +1,0 @@
-web: java -jar target/movers-1.0-jar-with-dependencies.jar

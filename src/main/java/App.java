@@ -8,22 +8,16 @@ import org.sql2o.Sql2o;
 import static spark.Spark.*;
 
 public class App {
-    static int getHerokuAssignedPort() {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        if (processBuilder.environment().get("PORT") != null) {
-            return Integer.parseInt(processBuilder.environment().get("PORT"));
-        }
-        return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
-    }
     public static void main(String[] args) {
         port(getHerokuAssignedPort());
+        staticFileLocation("public");
 
         Sql2oServiceDao sql2oServiceDao;
         Sql2oUserDao sql2oUserDao;
         Connection conn;
         Gson gson = new Gson();
 
-        String connectionString = "jdbc:postgresql://lkyizybqkygkvk:81e47c09943f1d05aabf6e71a744af70e738472850013f97193555842d8aaaa9@ec2-54-85-113-73.compute-1.amazonaws.com:5432/d1ngi3fj0iumcd";
+        String connectionString = "jdbc:postgresql://ec2-54-85-113-73.compute-1.amazonaws.com:5432/d1ngi3fj0iumcd";
         Sql2o sql2o = new Sql2o(connectionString, "lkyizybqkygkvk", "81e47c09943f1d05aabf6e71a744af70e738472850013f97193555842d8aaaa9");
         sql2oServiceDao = new Sql2oServiceDao(sql2o);
         sql2oUserDao = new Sql2oUserDao(sql2o);
@@ -101,5 +95,13 @@ public class App {
         after((req, res) -> {
             res.type("application/json");
         });
+    }
+
+    static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
     }
 }

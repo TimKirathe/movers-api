@@ -64,7 +64,6 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
@@ -77,27 +76,26 @@
                 </executions>
                 <configuration>
                     <descriptorRefs>
+                        <!-- This tells Maven to include all dependencies -->
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
                     <archive>
-
                         <manifest>
                             <mainClass>App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>com.heroku.sdk</groupId>
                 <artifactId>heroku-maven-plugin</artifactId>
-                <version>2.0.3</version>
+                <version>3.0.3</version>
                 <configuration>
                     <jdkVersion>1.8</jdkVersion>
-                    <!-- Change this to YOUR application name! -->
                     <appName>movers-apii</appName>
                     <processTypes>
-                        <web>java -jar target/movers-1.0-jar-with-dependencies.jar</web>
+                        <!-- Tell Heroku how to launch your application -->
+                        <web>java -jar ./target/movers-1.0-jar-with-dependencies.jar</web>
                     </processTypes>
                 </configuration>
             </plugin>
