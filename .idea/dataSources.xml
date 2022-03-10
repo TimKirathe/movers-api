@@ -8,12 +8,5 @@
       <jdbc-url>jdbc:postgresql://localhost:5432/movers_api</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="movers_api_test" uuid="27635d37-5f99-4a2f-9905-818eac94adb5">
-      <driver-ref>postgresql</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/movers_api_test</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
   </component>
 </project>

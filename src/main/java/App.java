@@ -8,16 +8,23 @@ import org.sql2o.Sql2o;
 import static spark.Spark.*;
 
 public class App {
-
+    static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
+    }
     public static void main(String[] args) {
+        port(getHerokuAssignedPort());
 
         Sql2oServiceDao sql2oServiceDao;
         Sql2oUserDao sql2oUserDao;
         Connection conn;
         Gson gson = new Gson();
 
-        String connectionString = "jdbc:postgresql://localhost:5432/movers_api";
-        Sql2o sql2o = new Sql2o(connectionString, null, null);
+        String connectionString = "jdbc:postgresql://lkyizybqkygkvk:81e47c09943f1d05aabf6e71a744af70e738472850013f97193555842d8aaaa9@ec2-54-85-113-73.compute-1.amazonaws.com:5432/d1ngi3fj0iumcd";
+        Sql2o sql2o = new Sql2o(connectionString, "lkyizybqkygkvk", "81e47c09943f1d05aabf6e71a744af70e738472850013f97193555842d8aaaa9");
         sql2oServiceDao = new Sql2oServiceDao(sql2o);
         sql2oUserDao = new Sql2oUserDao(sql2o);
         conn = sql2o.open();
@@ -29,8 +36,8 @@ public class App {
             Service service = gson.fromJson(req.body(), Service.class);
             sql2oServiceDao.save(service);
             res.status(201);
-            PostResponse postResponse = new PostResponse(201, "Successfully Added");
-            return gson.toJson(postResponse);
+            PostServiceResponse postServiceResponse = new PostServiceResponse(201, "Successfully Added", service);
+            return gson.toJson(postServiceResponse);
         });
 
         // Post User to DB
@@ -41,8 +48,8 @@ public class App {
             user.setPassword(hashedPassword);
             sql2oUserDao.save(user);
             res.status(201);
-            PostResponse postResponse = new PostResponse(201, "Successfully Added");
-            return gson.toJson(postResponse);
+            PostUserResponse postUserResponse = new PostUserResponse(201, "Successfully Added", user);
+            return gson.toJson(postUserResponse);
         });
 
         // User Logged In
