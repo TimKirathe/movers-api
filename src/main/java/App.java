@@ -13,6 +13,7 @@ public class App {
         staticFileLocation("public");
 
         Sql2oServiceDao sql2oServiceDao;
+        DistanceCalculator distanceCalculator = new DistanceCalculator();
         Sql2oUserDao sql2oUserDao;
         Connection conn;
         Gson gson = new Gson();
@@ -63,6 +64,20 @@ public class App {
             res.status(201);
             LoginResponse loginResponse = new LoginResponse(201, "Success", user);
             return gson.toJson(loginResponse);
+        });
+
+        // Get distance between two points
+        post("/calculate", "application/json", (req, res) -> {
+            Calculate calculate = gson.fromJson(req.body(), Calculate.class);
+            Service service = sql2oServiceDao.findById(calculate.getId());
+            int rate = 1000;
+
+            double distance = distanceCalculator.calculateDistance(
+                    Double.parseDouble(calculate.getLongFrom()),Double.parseDouble(calculate.getLongTo()),Double.parseDouble(calculate.getLatFrom()),Double.parseDouble(calculate.getLatTo()));
+            double price = service.getPrice() + (rate * distance );
+            ResponseObject response = new ResponseObject(200, "Success", price);
+            res.status(200);
+            return gson.toJson(response);
         });
 
 
