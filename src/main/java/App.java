@@ -61,7 +61,7 @@ public class App {
             }
             if (!loginUser.getPassword().equals(user.getPassword()) || !loginUser.getEmail().equals(user.getEmail())) {
                 res.status(404);
-                ErrorResponse errorResponse = new ErrorResponse(404, "The email or password is not correct.");
+                ErrorResponse errorResponse = new ErrorResponse(404, "The email or password you entered is not correct.");
                 return gson.toJson(errorResponse);
             }
             res.status(201);
@@ -122,7 +122,7 @@ public class App {
         // Get all invoices.
         get("invoice/all", "application/json", (req, res) -> {
             if (sql2oServiceDao.getAll().size() == 0) {
-                ErrorResponse errorResponse = new ErrorResponse(404, "Sorry, there are no services currently available.");
+                ErrorResponse errorResponse = new ErrorResponse(404, "Sorry, there are no invoices.");
                 return gson.toJson(errorResponse);
             }
             ResponseList response = new ResponseList(200, "Success", sql2oServiceDao.getAll());
