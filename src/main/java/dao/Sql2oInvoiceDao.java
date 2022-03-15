@@ -55,10 +55,10 @@ public class Sql2oInvoiceDao implements InvoiceDao {
     }
 
     @Override
-    public List<Invoice> findByUserId(int id) {
+    public List<Invoice> findByUserId(int userId) {
         try (Connection conn = sql2o.open()) {
-            String sql = "SELECT * FROM invoice WHERE userid = :id";
-            return conn.createQuery(sql).addParameter("id", id)
+            String sql = "SELECT * FROM invoice WHERE userid = :userId";
+            return conn.createQuery(sql).addParameter("userId", userId)
                     .executeAndFetch(Invoice.class);
         } catch (Sql2oException ex) {
             System.out.println(ex);

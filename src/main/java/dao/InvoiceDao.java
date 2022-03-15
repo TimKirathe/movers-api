@@ -12,7 +12,7 @@ public interface InvoiceDao {
     // READ
     List<Invoice> getAll();
     Invoice findById(int id);
-    List<Invoice> findByUserId(int id);
+    List<Invoice> findByUserId(int userId);
 
     // UPDATE
 
