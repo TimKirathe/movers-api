@@ -11,9 +11,9 @@ public class Booking {
     private String latTo;
     private String longTo;
     private String date;
-    private String userId;
+    private int userId;
 
-    public Booking(String latFrom, String longFrom, String latTo, String longTo, String date, String userId) {
+    public Booking(String latFrom, String longFrom, String latTo, String longTo, String date, int userId) {
         this.latFrom = latFrom;
         this.longFrom = longFrom;
         this.latTo = latTo;
@@ -70,11 +70,11 @@ public class Booking {
         this.date = date;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -83,7 +83,7 @@ public class Booking {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Booking booking = (Booking) o;
-        return id == booking.id && latFrom.equals(booking.latFrom) && longFrom.equals(booking.longFrom) && latTo.equals(booking.latTo) && longTo.equals(booking.longTo) && date.equals(booking.date) && userId.equals(booking.userId);
+        return id == booking.id && userId == booking.userId && latFrom.equals(booking.latFrom) && longFrom.equals(booking.longFrom) && latTo.equals(booking.latTo) && longTo.equals(booking.longTo) && date.equals(booking.date);
     }
 
     @Override

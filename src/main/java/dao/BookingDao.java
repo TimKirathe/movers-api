@@ -11,7 +11,7 @@ public interface BookingDao {
 
     // READ
     Booking findById(int id);
-    List<Booking> findAllBookingsByUserId(int id);
+    List<Booking> findAllBookingsByUserId(int userId);
 
     // UPDATE
 
