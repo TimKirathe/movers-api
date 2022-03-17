@@ -19,14 +19,13 @@ public class Sql2oInvoiceDao implements InvoiceDao {
     @Override
     public void save(Invoice invoice) {
         try(Connection conn = sql2o.open()){
-            String sql = "INSERT INTO invoice (userid, name, email, price, noofbedrooms, amount, latfrom, longfrom, latto, longto, date ) VALUES (:userId, :name, :email, :price, :noOfBedRooms, :amount, :latFrom, :longFrom, :latTo, :longTo, :date )";
+            String sql = "INSERT INTO invoice (userid, name, email, price, noofbedrooms, latfrom, longfrom, latto, longto, date ) VALUES (:userId, :name, :email, :price, :noOfBedRooms, :latFrom, :longFrom, :latTo, :longTo, :date )";
             int id = (int) conn.createQuery(sql).bind(invoice)
                     .addParameter("userId", invoice.getUserId())
                     .addParameter("name", invoice.getName())
                     .addParameter("email", invoice.getEmail())
                     .addParameter("price", invoice.getPrice())
                     .addParameter("noOfBedRooms", invoice.getNoOfBedRooms())
-                    .addParameter("amount", invoice.getAmount())
                     .addParameter("latFrom", invoice.getLatFrom())
                     .addParameter("longFrom", invoice.getLongFrom())
                     .addParameter("latTo", invoice.getLatTo())
