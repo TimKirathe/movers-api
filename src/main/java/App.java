@@ -97,7 +97,7 @@ public class App {
         // GET METHODS
 
         // Get user by email
-        get("/users/:id", "application/json", (req, res) -> {
+        get("/users/email", "application/json", (req, res) -> {
             String email = gson.fromJson(req.body(), String.class);
             User user = sql2oUserDao.findByEmail(email);
             if (user == null) {
