@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import dao.Sql2oBookingDao;
 import dao.Sql2oInvoiceDao;
 import dao.Sql2oServiceDao;
 import dao.Sql2oUserDao;
@@ -17,6 +18,7 @@ public class App {
         DistanceCalculator distanceCalculator = new DistanceCalculator();
         Sql2oUserDao sql2oUserDao;
         Sql2oInvoiceDao sql2oInvoiceDao;
+        Sql2oBookingDao sql2oBookingDao;
         Connection conn;
         Gson gson = new Gson();
 
@@ -25,6 +27,7 @@ public class App {
         sql2oServiceDao = new Sql2oServiceDao(sql2o);
         sql2oUserDao = new Sql2oUserDao(sql2o);
         sql2oInvoiceDao = new Sql2oInvoiceDao(sql2o);
+        sql2oBookingDao = new Sql2oBookingDao(sql2o);
         conn = sql2o.open();
 
         // POST METHODS
@@ -90,6 +93,14 @@ public class App {
             res.status(201);
             PostResponse postResponse = new PostResponse(201, "Successfully Added", invoice);
             return gson.toJson(postResponse);
+        });
+
+        post("bookings/new", "application/json", (req, res) -> {
+           Booking booking = gson.fromJson(req.body(), Booking.class);
+           sql2oBookingDao.save(booking);
+           res.status(201);
+           PostResponse postResponse = new PostResponse(201, "Successfully Added", booking);
+           return gson.toJson(postResponse);
         });
 
 
