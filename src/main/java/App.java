@@ -103,12 +103,8 @@ public class App {
            return gson.toJson(postResponse);
         });
 
-
-
-        // GET METHODS
-
         // Get user by email
-        get("/users/email", "application/json", (req, res) -> {
+        post("/users/email", "application/json", (req, res) -> {
             String email = gson.fromJson(req.body(), String.class);
             User user = sql2oUserDao.findByEmail(email);
             if (user == null) {
@@ -120,6 +116,10 @@ public class App {
             ResponseObject responseObject = new ResponseObject(201, "Success!", user);
             return gson.toJson(responseObject);
         });
+
+
+
+        // GET METHODS
 
         // Get all services.
         get("/services", "application/json", (req, res) -> {
