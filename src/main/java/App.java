@@ -167,6 +167,18 @@ public class App {
             return gson.toJson(responseList);
         });
 
+        // Get all bookings for a specific user by user ID.
+        get("bookings/user/:id", "application/json", (req, res) -> {
+            int id = Integer.parseInt(req.params("id"));
+            if (sql2oBookingDao.findAllBookingsByUserId(id) == null) {
+                ErrorResponse errorResponse = new ErrorResponse(495, "Sorry, you don't have any bookings");
+                return gson.toJson(errorResponse);
+            }
+            ResponseList responseList = new ResponseList(200, "Success", sql2oBookingDao.findAllBookingsByUserId(id));
+            res.status(200);
+            return gson.toJson(responseList);
+        });
+
         // Get an invoice by its ID.
         get ("invoice/:id", "application/json", (req, res) -> {
             int id = Integer.parseInt(req.params("id"));
