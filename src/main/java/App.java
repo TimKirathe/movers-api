@@ -113,7 +113,7 @@ public class App {
                 return gson.toJson(errorResponse);
             }
             res.status(201);
-            ResponseObject responseObject = new ResponseObject(201, "Success!", user);
+            ResponseUser responseObject = new ResponseUser(201, "Success!", user);
             return gson.toJson(responseObject);
         });
 
@@ -186,7 +186,7 @@ public class App {
                 ErrorResponse errorResponse = new ErrorResponse(495, "Sorry, no such invoice exists.");
                 return gson.toJson(errorResponse);
             }
-            ResponseObject responseObject = new ResponseObject(200, "Success", sql2oInvoiceDao.findById(id));
+            ResponseInvoice responseObject = new ResponseInvoice(200, "Success", sql2oInvoiceDao.findById(id));
             res.status(200);
             return gson.toJson(responseObject);
         });
