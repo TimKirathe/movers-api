@@ -9,7 +9,6 @@ public class Invoice {
     private String email;
     private int price;
     private String noOfBedRooms;
-    private int amount;
     private String latFrom;
     private String longFrom;
     private String latTo;
@@ -17,13 +16,12 @@ public class Invoice {
     private String date;
 
 
-    public Invoice(int userId, String name, String email, int price, String noOfBedRooms, int amount, String latFrom, String longFrom, String latTo, String longTo, String date) {
+    public Invoice(int userId, String name, String email, int price, String noOfBedRooms, String latFrom, String longFrom, String latTo, String longTo, String date) {
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.price = price;
         this.noOfBedRooms = noOfBedRooms;
-        this.amount = amount;
         this.latFrom = latFrom;
         this.longFrom = longFrom;
         this.latTo = latTo;
@@ -80,14 +78,6 @@ public class Invoice {
         this.noOfBedRooms = noOfBedRooms;
     }
 
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
     public String getLatFrom() {
         return latFrom;
     }
@@ -133,11 +123,11 @@ public class Invoice {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Invoice invoice = (Invoice) o;
-        return id == invoice.id && userId == invoice.userId && price == invoice.price && amount == invoice.amount && name.equals(invoice.name) && email.equals(invoice.email) && noOfBedRooms.equals(invoice.noOfBedRooms) && latFrom.equals(invoice.latFrom) && longFrom.equals(invoice.longFrom) && latTo.equals(invoice.latTo) && longTo.equals(invoice.longTo) && date.equals(invoice.date);
+        return id == invoice.id && userId == invoice.userId && price == invoice.price && name.equals(invoice.name) && email.equals(invoice.email) && noOfBedRooms.equals(invoice.noOfBedRooms) && latFrom.equals(invoice.latFrom) && longFrom.equals(invoice.longFrom) && latTo.equals(invoice.latTo) && longTo.equals(invoice.longTo) && date.equals(invoice.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, name, email, price, noOfBedRooms, amount, latFrom, longFrom, latTo, longTo, date);
+        return Objects.hash(id, userId, name, email, price, noOfBedRooms, latFrom, longFrom, latTo, longTo, date);
     }
 }
