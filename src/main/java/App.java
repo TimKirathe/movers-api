@@ -91,7 +91,7 @@ public class App {
             Invoice invoice = gson.fromJson(req.body(), Invoice.class);
             sql2oInvoiceDao.save(invoice);
             res.status(201);
-            PostResponse postResponse = new PostResponse(201, "Successfully Added", invoice);
+            PostInvoiceResponse postResponse = new PostInvoiceResponse(201, "Successfully Added", invoice);
             return gson.toJson(postResponse);
         });
 
@@ -99,7 +99,7 @@ public class App {
            Booking booking = gson.fromJson(req.body(), Booking.class);
            sql2oBookingDao.save(booking);
            res.status(201);
-           PostResponse postResponse = new PostResponse(201, "Successfully Added", booking);
+           PostBookingResponse postResponse = new PostBookingResponse(201, "Successfully Added", booking);
            return gson.toJson(postResponse);
         });
 
@@ -174,7 +174,7 @@ public class App {
                 ErrorResponse errorResponse = new ErrorResponse(495, "Sorry, you don't have any bookings");
                 return gson.toJson(errorResponse);
             }
-            ResponseList responseList = new ResponseList(200, "Success", sql2oBookingDao.findAllBookingsByUserId(id));
+            ResponseBookingList responseList = new ResponseBookingList(200, "Success", sql2oBookingDao.findAllBookingsByUserId(id));
             res.status(200);
             return gson.toJson(responseList);
         });
