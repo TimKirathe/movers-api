@@ -81,7 +81,7 @@ public class App {
             double distance = distanceCalculator.calculateDistance(
                     Double.parseDouble(calculate.getLongFrom()),Double.parseDouble(calculate.getLongTo()),Double.parseDouble(calculate.getLatFrom()),Double.parseDouble(calculate.getLatTo()));
             Double price = service.getPrice() + (rate * distance );
-            ResponseObject response = new ResponseObject(200, "Success", price);
+            ResponseDistance response = new ResponseDistance(200, "Success", price);
             res.status(200);
             return gson.toJson(response);
         });
