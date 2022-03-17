@@ -55,13 +55,13 @@ public class App {
             LoginUser loginUser = gson.fromJson(req.body(), LoginUser.class);
             User user = sql2oUserDao.findByEmail(loginUser.getEmail());
             if (user == null) {
-                res.status(404);
-                ErrorResponse errorResponse = new ErrorResponse(404, "This user does not exist");
+                res.status(495);
+                ErrorResponse errorResponse = new ErrorResponse(495, "This user does not exist");
                 return gson.toJson(errorResponse);
             }
             if (!loginUser.getPassword().equals(user.getPassword()) || !loginUser.getEmail().equals(user.getEmail())) {
-                res.status(404);
-                ErrorResponse errorResponse = new ErrorResponse(404, "The email or password you entered is not correct.");
+                res.status(495);
+                ErrorResponse errorResponse = new ErrorResponse(495, "The email or password you entered is not correct.");
                 return gson.toJson(errorResponse);
             }
             res.status(201);
@@ -77,7 +77,7 @@ public class App {
 
             double distance = distanceCalculator.calculateDistance(
                     Double.parseDouble(calculate.getLongFrom()),Double.parseDouble(calculate.getLongTo()),Double.parseDouble(calculate.getLatFrom()),Double.parseDouble(calculate.getLatTo()));
-            double price = service.getPrice() + (rate * distance );
+            Double price = service.getPrice() + (rate * distance );
             ResponseObject response = new ResponseObject(200, "Success", price);
             res.status(200);
             return gson.toJson(response);
@@ -96,10 +96,24 @@ public class App {
 
         // GET METHODS
 
+        // Get user by email
+        get("/users/:id", "application/json", (req, res) -> {
+            String email = gson.fromJson(req.body(), String.class);
+            User user = sql2oUserDao.findByEmail(email);
+            if (user == null) {
+                res.status(495);
+                ErrorResponse errorResponse = new ErrorResponse(495, "This user does not exist");
+                return gson.toJson(errorResponse);
+            }
+            res.status(201);
+            ResponseObject responseObject = new ResponseObject(201, "Success!", user);
+            return gson.toJson(responseObject);
+        });
+
         // Get all services.
         get("/services", "application/json", (req, res) -> {
             if (sql2oServiceDao.getAll().size() == 0) {
-                ErrorResponse errorResponse = new ErrorResponse(404, "Sorry, there are no services currently available.");
+                ErrorResponse errorResponse = new ErrorResponse(495, "Sorry, there are no services currently available.");
                 return gson.toJson(errorResponse);
             }
             ResponseList response = new ResponseList(200, "Success", sql2oServiceDao.getAll());
@@ -111,7 +125,7 @@ public class App {
         get("services/:id", "application/json", (req, res) -> {
             int id = Integer.parseInt(req.params("id"));
             if (sql2oServiceDao.findById(id) == null) {
-                ErrorResponse errorResponse = new ErrorResponse(404, "Sorry, no such service exists.");
+                ErrorResponse errorResponse = new ErrorResponse(495, "Sorry, no such service exists.");
                 return gson.toJson(errorResponse);
             }
             ResponseObject responseObject = new ResponseObject(200, "Success", sql2oServiceDao.findById(id));
@@ -122,7 +136,7 @@ public class App {
         // Get all invoices.
         get("invoice/all", "application/json", (req, res) -> {
             if (sql2oServiceDao.getAll().size() == 0) {
-                ErrorResponse errorResponse = new ErrorResponse(404, "Sorry, there are no invoices.");
+                ErrorResponse errorResponse = new ErrorResponse(495, "Sorry, there are no invoices.");
                 return gson.toJson(errorResponse);
             }
             ResponseList response = new ResponseList(200, "Success", sql2oServiceDao.getAll());
@@ -134,7 +148,7 @@ public class App {
         get("invoice/user/:id", "application/json", (req, res) -> {
             int id = Integer.parseInt(req.params("id"));
             if (sql2oInvoiceDao.findByUserId(id).size() == 0) {
-                ErrorResponse errorResponse = new ErrorResponse(404, "You have no invoices.");
+                ErrorResponse errorResponse = new ErrorResponse(495, "You have no invoices.");
                 return gson.toJson(errorResponse);
             }
             ResponseList responseList = new ResponseList(200, "Success", sql2oInvoiceDao.findByUserId(id));
@@ -146,7 +160,7 @@ public class App {
         get ("invoice/:id", "application/json", (req, res) -> {
             int id = Integer.parseInt(req.params("id"));
             if (sql2oInvoiceDao.findById(id) == null) {
-                ErrorResponse errorResponse = new ErrorResponse(404, "Sorry, no such invoice exists.");
+                ErrorResponse errorResponse = new ErrorResponse(495, "Sorry, no such invoice exists.");
                 return gson.toJson(errorResponse);
             }
             ResponseObject responseObject = new ResponseObject(200, "Success", sql2oInvoiceDao.findById(id));
